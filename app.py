@@ -1,9 +1,6 @@
 import httpx
 import asyncio
-from fastapi import FastAPI
 from datetime import datetime
-
-app = FastAPI()
 
 def generate_dummy_data(command):
     """명령어에 따라 더미 데이터를 생성"""
@@ -35,14 +32,16 @@ async def call_dummy_and_post():
             "timestamp": timestamp
         }
         async with httpx.AsyncClient() as client:
-            response = await client.post("http://dev.recs.kr:8002/data/recv/data", json=data)
-            print(f"Sent data: {data} | Response: {response.status_code}")
+            try:
+                response = await client.post("http://dev.recs.kr:8002/data/recv/data", json=data)
+                print(f"Sent data: {data} | Response: {response.status_code}")
+            except httpx.RequestError as exc:
+                print(f"An error occurred while requesting {exc.request.url!r}.")
+
         await asyncio.sleep(10)
 
-@app.on_event("startup")
-async def startup_event():
-    asyncio.create_task(call_dummy_and_post())
+async def main():
+    await call_dummy_and_post()
 
-@app.get("/")
-async def root():
-    return {"message": "FastAPI 서버가 실행 중입니다. 10초마다 외부 API를 호출합니다."}
+if __name__ == "__main__":
+    asyncio.run(main())
