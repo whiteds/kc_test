@@ -25,11 +25,12 @@ def send_to_api(data):
 def main():
     ser = None
     try:
-        # /dev/serial0 포트에 연결
+        # /dev/serial0 포트에 115200 baudrate로 연결
         ser = serial.Serial(SERIAL_PORT, baudrate=BAUDRATE, timeout=1)
         print(f"{SERIAL_PORT} 포트에 성공적으로 연결되었습니다.")
 
         while True:
+            all_responses = []
             for command in COMMANDS:
                 print(f"명령어 송신: {command}")
                 ser.write(f"{command}\r\n".encode())  # 명령어 전송
@@ -39,11 +40,15 @@ def main():
                 response = read_from_serial(ser)
                 if response:
                     print(f"수신한 데이터: {response}")
-                    send_to_api(response)
+                    all_responses.append(response)
+
+            if all_responses:
+                combined_response = ",".join(all_responses)
+                send_to_api(combined_response)
 
             time.sleep(1)  # 1초 대기
 
-    except serial.SerialException as e:
+    except serial.serialutil.SerialException as e:
         print(f"{SERIAL_PORT} 포트에 연결할 수 없습니다: {e}")
     except KeyboardInterrupt:
         print("사용자에 의해 프로그램이 중단되었습니다.")
