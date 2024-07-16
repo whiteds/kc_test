@@ -22,12 +22,21 @@ def send_to_api(data):
     response = httpx.post(API_URL, json=payload)
     print(f"Sent data: {payload} | Response: {response.status_code}")
 
+def connect_serial(port, baudrate):
+    while True:
+        try:
+            ser = serial.Serial(port, baudrate=baudrate, timeout=1)
+            print(f"{port} 포트에 성공적으로 연결되었습니다.")
+            return ser
+        except serial.serialutil.SerialException as e:
+            print(f"{port} 포트에 연결할 수 없습니다: {e}")
+            print("5초 후 다시 시도합니다...")
+            time.sleep(5)
+
 def main():
     ser = None
     try:
-        # /dev/serial0 포트에 115200 baudrate로 연결
-        ser = serial.Serial(SERIAL_PORT, baudrate=BAUDRATE, timeout=1)
-        print(f"{SERIAL_PORT} 포트에 성공적으로 연결되었습니다.")
+        ser = connect_serial(SERIAL_PORT, BAUDRATE)
 
         while True:
             all_responses = []
@@ -36,7 +45,7 @@ def main():
                 ser.write(f"{command}\r\n".encode())  # 명령어 전송
 
                 # 응답 대기 및 읽기
-                time.sleep(0.5)  # 장치가 응답을 보낼 시간을 줌
+                time.sleep(0.3)  # 장치가 응답을 보낼 시간을 줌
                 response = read_from_serial(ser)
                 if response:
                     print(f"수신한 데이터: {response}")
@@ -48,8 +57,6 @@ def main():
 
             time.sleep(1)  # 1초 대기
 
-    except serial.serialutil.SerialException as e:
-        print(f"{SERIAL_PORT} 포트에 연결할 수 없습니다: {e}")
     except KeyboardInterrupt:
         print("사용자에 의해 프로그램이 중단되었습니다.")
     finally:
