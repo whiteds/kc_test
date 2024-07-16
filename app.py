@@ -19,8 +19,11 @@ def send_to_api(data):
         "data": data,
         "timestamp": timestamp
     }
-    response = httpx.post(API_URL, json=payload)
-    print(f"Sent data: {payload} | Response: {response.status_code}")
+    try:
+        response = httpx.post(API_URL, json=payload)
+        print(f"Sent data: {payload} | Response: {response.status_code}")
+    except httpx.RequestError as e:
+        print(f"API 요청에 실패했습니다: {e}")
 
 def connect_serial(port, baudrate):
     while True:
