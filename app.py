@@ -48,7 +48,7 @@ def main():
                 ser.write(f"{command}\r\n".encode())  # 명령어 전송
 
                 # 응답 대기 및 읽기
-                time.sleep(0.5)  # 장치가 응답을 보낼 시간을 줌
+                time.sleep(0.4)  # 장치가 응답을 보낼 시간을 줌
                 response = read_from_serial(ser)
                 if response:
                     print(f"수신한 데이터: {response}")

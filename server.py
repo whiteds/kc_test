@@ -5,17 +5,17 @@ import random
 def generate_dummy_data(command):
     """명령어에 따라 더미 데이터를 무작위로 생성"""
     if command == "P001MOD":
-        response = f"D017001,{random.randint(1, 10)},{random.randint(100, 999)},{random.randint(300, 400)},{random.randint(20, 30)}"
+        response = f"^D017001,{random.randint(1, 10)},{random.randint(100, 999)},{random.randint(300, 400)},{random.randint(20, 30)}"
     elif command == "P001ST1":
-        response = f"D120001,{random.randint(300, 500)},{random.randint(100, 300)},{random.randint(50, 100)},{random.randint(10, 20)}"
+        response = f"^D120001,{random.randint(300, 500)},{random.randint(100, 300)},{random.randint(50, 100)},{random.randint(10, 20)}"
     elif command == "P001ST2":
-        response = f"D222001,{random.randint(300, 400)},{random.randint(300, 400)},{random.randint(300, 400)},{random.randint(500, 700)},{random.randint(50, 60)}"
+        response = f"^D222001,{random.randint(300, 400)},{random.randint(300, 400)},{random.randint(300, 400)},{random.randint(500, 700)},{random.randint(50, 60)}"
     elif command == "P001ST3":
-        response = f"D321001,{random.randint(100, 200)},{random.randint(100, 200)},{random.randint(100, 200)},{random.randint(30, 50)}"
+        response = f"^D321001,{random.randint(100, 200)},{random.randint(100, 200)},{random.randint(100, 200)},{random.randint(30, 50)}"
     elif command == "P001ST4":
-        response = f"D419001,{random.randint(50, 100)},{random.randint(0, 100000)},{random.randint(20, 40)}"
+        response = f"^D419001,{random.randint(50, 100)},{random.randint(0, 100000)},{random.randint(20, 40)}"
     elif command == "P001ST6":
-        response = f"D612001,{random.randint(0, 1)},{random.randint(0, 1)},{random.randint(0, 1)},{random.randint(5, 15)}"
+        response = f"^D612001,{random.randint(0, 1)},{random.randint(0, 1)},{random.randint(0, 1)},{random.randint(5, 15)}"
     else:
         response = "UNKNOWN COMMAND"
 
